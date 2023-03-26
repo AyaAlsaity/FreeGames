@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:free_games/model/game_module.dart';
+import 'package:free_games/model/games_module.dart';
 
 // ignore: must_be_immutable
 class GameCard extends StatefulWidget {

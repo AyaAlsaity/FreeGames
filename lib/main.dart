@@ -1,22 +1,62 @@
 import 'package:flutter/material.dart';
-
-import 'screen/home_screen.dart';
+import 'package:free_games/providers/games_provider.dart';
+import 'package:free_games/providers/single_game_provider.dart';
+import 'package:free_games/providers/theme_provider.dart';
+import 'package:provider/provider.dart';
+import 'screens/home_screen.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const HomePage(),
+     return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => GamesProvider()),
+        ChangeNotifierProvider(create: (context) => ThemeProvider()),
+        ChangeNotifierProvider(create: (context) => SingleGameProvider()),
+      ],
+      child: Consumer<ThemeProvider>(builder: (context, themeConsumer, _) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Flutter Demo',
+          theme: ThemeData(
+          
+            drawerTheme:DrawerThemeData(
+              backgroundColor:themeConsumer.isDark ?  Colors.black : Colors.white,
+            ),
+            scaffoldBackgroundColor:
+                themeConsumer.isDark ? Colors.black : Colors.white,
+            appBarTheme: AppBarTheme(
+              iconTheme: IconThemeData(
+                  color: themeConsumer.isDark ? Colors.white : Colors.black),
+              color: themeConsumer.isDark ? Colors.black : Colors.white,
+              titleTextStyle: TextStyle(
+                  color: themeConsumer.isDark ? Colors.white : Colors.black),
+            ),
+          //  primaryIconTheme: IconThemeData(
+          //   color:  themeConsumer.isDark ? Colors.white : Colors.black
+          //  ),
+            textTheme: TextTheme(
+              bodyText1:TextStyle(
+                color: themeConsumer.isDark ? Colors.white : Colors.black,
+              ),
+              
+            ),
+            bottomNavigationBarTheme:BottomNavigationBarThemeData(
+              backgroundColor: themeConsumer.isDark ? Colors.black : Colors.white,
+              unselectedItemColor: themeConsumer.isDark ? Colors.white : Colors.black,
+            ),
+            
+            primarySwatch: Colors.blue,
+          ),
+          home: const HomePage(),
+        );
+      }),
     );
   }
 }
